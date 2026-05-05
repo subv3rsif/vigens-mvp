@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import { useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { createClient } from '../supabase/client';
@@ -85,7 +85,7 @@ export function useTasks(projectId?: string) {
   });
 
   // Sync to Zustand store
-  React.useEffect(() => {
+  useEffect(() => {
     setTasks(tasks);
   }, [tasks, setTasks]);
 
@@ -128,20 +128,27 @@ export function useTasks(projectId?: string) {
       return { previousTasks, tempTask };
     },
     onSuccess: (data, _, context) => {
+      // Guard against undefined context
+      if (!context) return;
+
       // Replace temp task with real one
       queryClient.setQueryData<Task[]>(queryKey, (old) =>
         old
           ? old.map((t) =>
-              t.id === context?.tempTask.id ? data : t
+              t.id === context.tempTask.id ? data : t
             )
           : [data]
       );
-      updateTask(context?.tempTask.id!, data);
+      updateTask(context.tempTask.id, data);
       toast.success('Tâche créée');
     },
     onError: (_, __, context) => {
       // Rollback on error
       queryClient.setQueryData(queryKey, context?.previousTasks);
+      // Also rollback Zustand store
+      if (context?.tempTask) {
+        deleteTask(context.tempTask.id);
+      }
       toast.error('Erreur lors de la création de la tâche');
     },
   });
@@ -174,12 +181,19 @@ export function useTasks(projectId?: string) {
 
       return { previousTasks };
     },
-    onSuccess: (data) => {
+    onSuccess: (_, __, context) => {
+      // Guard against undefined context
+      if (!context) return;
+
       toast.success('Tâche mise à jour');
     },
     onError: (_, __, context) => {
       // Rollback on error
       queryClient.setQueryData(queryKey, context?.previousTasks);
+      // Also rollback Zustand store
+      if (context?.previousTasks) {
+        setTasks(context.previousTasks);
+      }
       toast.error('Erreur lors de la mise à jour de la tâche');
     },
   });
@@ -204,12 +218,19 @@ export function useTasks(projectId?: string) {
 
       return { previousTasks };
     },
-    onSuccess: () => {
+    onSuccess: (_, __, context) => {
+      // Guard against undefined context
+      if (!context) return;
+
       toast.success('Tâche supprimée');
     },
     onError: (_, __, context) => {
       // Rollback on error
       queryClient.setQueryData(queryKey, context?.previousTasks);
+      // Also rollback Zustand store
+      if (context?.previousTasks) {
+        setTasks(context.previousTasks);
+      }
       toast.error('Erreur lors de la suppression de la tâche');
     },
   });

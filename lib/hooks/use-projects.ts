@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import { useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { createClient } from '../supabase/client';
@@ -76,7 +76,7 @@ export function useProjects() {
   });
 
   // Sync to Zustand store
-  React.useEffect(() => {
+  useEffect(() => {
     setProjects(projects);
   }, [projects, setProjects]);
 
@@ -118,20 +118,27 @@ export function useProjects() {
       return { previousProjects, tempProject };
     },
     onSuccess: (data, _, context) => {
+      // Guard against undefined context
+      if (!context) return;
+
       // Replace temp project with real one
       queryClient.setQueryData<Project[]>(PROJECTS_QUERY_KEY, (old) =>
         old
           ? old.map((p) =>
-              p.id === context?.tempProject.id ? data : p
+              p.id === context.tempProject.id ? data : p
             )
           : [data]
       );
-      updateProject(context?.tempProject.id!, data);
+      updateProject(context.tempProject.id, data);
       toast.success('Projet créé');
     },
     onError: (_, __, context) => {
       // Rollback on error
       queryClient.setQueryData(PROJECTS_QUERY_KEY, context?.previousProjects);
+      // Also rollback Zustand store
+      if (context?.tempProject) {
+        deleteProject(context.tempProject.id);
+      }
       toast.error('Erreur lors de la création du projet');
     },
   });
@@ -166,12 +173,19 @@ export function useProjects() {
 
       return { previousProjects };
     },
-    onSuccess: (data) => {
+    onSuccess: (_, __, context) => {
+      // Guard against undefined context
+      if (!context) return;
+
       toast.success('Projet mis à jour');
     },
     onError: (_, __, context) => {
       // Rollback on error
       queryClient.setQueryData(PROJECTS_QUERY_KEY, context?.previousProjects);
+      // Also rollback Zustand store
+      if (context?.previousProjects) {
+        setProjects(context.previousProjects);
+      }
       toast.error('Erreur lors de la mise à jour du projet');
     },
   });
@@ -198,12 +212,19 @@ export function useProjects() {
 
       return { previousProjects };
     },
-    onSuccess: () => {
+    onSuccess: (_, __, context) => {
+      // Guard against undefined context
+      if (!context) return;
+
       toast.success('Projet supprimé');
     },
     onError: (_, __, context) => {
       // Rollback on error
       queryClient.setQueryData(PROJECTS_QUERY_KEY, context?.previousProjects);
+      // Also rollback Zustand store
+      if (context?.previousProjects) {
+        setProjects(context.previousProjects);
+      }
       toast.error('Erreur lors de la suppression du projet');
     },
   });
