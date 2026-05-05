@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(/Users/germainlefranc/.claude/plugins/cache/claude-plugins-official/superpowers/5.1.0/skills/brainstorming/scripts/start-server.sh:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(/Users/germainlefranc/.claude/plugins/cache/claude-plugins-official/superpowers/5.1.0/skills/brainstorming/scripts/stop-server.sh /Users/germainlefranc/Documents/PWA/vigens/.superpowers/brainstorm/43912-1777991951)",
+      "Bash(npx create-next-app:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run build:*)",
+      "Bash(curl:*)",
+      "Bash(pkill:*)",
+      "Bash(/Users/germainlefranc/Documents/PWA/vigens/app/globals.css << 'EOF'\n@import \"tailwindcss\";\n@import url\\('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap'\\);\n\n@theme {\n  --color-background: #0f0f0f;\n  --color-card: #1a1a1a;\n  --color-border: #262626;\n  --color-text-primary: #ffffff;\n  --color-text-secondary: #888888;\n  --color-accent-blue: #3b82f6;\n  --color-accent-purple: #8b5cf6;\n  --color-success: #10b981;\n  --color-warning: #f59e0b;\n  --color-error: #ef4444;\n  --color-priority-low: #6b7280;\n  --color-priority-medium: #f59e0b;\n  --color-priority-high: #ef4444;\n\n  --font-family-sans: 'Inter', sans-serif;\n  --font-family-mono: 'Fira Code', monospace;\n\n  --font-size-h1: 32px;\n  --line-height-h1: 1.2;\n  --font-weight-h1: 700;\n\n  --font-size-h2: 24px;\n  --line-height-h2: 1.3;\n  --font-weight-h2: 600;\n\n  --font-size-h3: 18px;\n  --line-height-h3: 1.4;\n  --font-weight-h3: 600;\n\n  --font-size-body: 14px;\n  --line-height-body: 1.5;\n  --font-weight-body: 400;\n\n  --font-size-small: 12px;\n  --line-height-small: 1.4;\n  --font-weight-small: 400;\n\n  --spacing-xs: 4px;\n  --spacing-sm: 8px;\n  --spacing-md: 16px;\n  --spacing-lg: 24px;\n  --spacing-xl: 32px;\n  --spacing-2xl: 48px;\n\n  --radius-sm: 4px;\n  --radius-md: 6px;\n  --radius-lg: 8px;\n\n  --shadow-sm: 0 1px 2px rgba\\(0, 0, 0, 0.05\\);\n  --shadow-md: 0 1px 3px rgba\\(0, 0, 0, 0.1\\);\n  --shadow-lg: 0 4px 6px rgba\\(0, 0, 0, 0.1\\);\n}\n\n@layer base {\n  html {\n    color-scheme: dark;\n  }\n\n  body {\n    @apply bg-background text-text-primary;\n    font-family: 'Inter', sans-serif;\n  }\n\n  * {\n    @apply border-border;\n  }\n}\n\n@layer utilities {\n  .focus-ring {\n    @apply focus:outline-none focus:ring-2 focus:ring-accent-blue;\n  }\n\n  .text-h1 {\n    font-size: var\\(--font-size-h1\\);\n    line-height: var\\(--line-height-h1\\);\n    font-weight: var\\(--font-weight-h1\\);\n  }\n\n  .text-h2 {\n    font-size: var\\(--font-size-h2\\);\n    line-height: var\\(--line-height-h2\\);\n    font-weight: var\\(--font-weight-h2\\);\n  }\n\n  .text-h3 {\n    font-size: var\\(--font-size-h3\\);\n    line-height: var\\(--line-height-h3\\);\n    font-weight: var\\(--font-weight-h3\\);\n  }\n}\nEOF)",
+      "Bash(git checkout:*)",
+      "Bash(npx tsc:*)",
+      "Bash(cat:*)"
+    ]
+  }
+}
