@@ -4,7 +4,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { Project } from '../../types/database.types';
 
-interface ProjectState {
+export interface ProjectState {
   projects: Project[];
   currentProject: Project | null;
   setProjects: (projects: Project[]) => void;

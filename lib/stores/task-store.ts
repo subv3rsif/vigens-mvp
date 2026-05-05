@@ -4,7 +4,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { Task } from '../../types/database.types';
 
-interface TaskState {
+export interface TaskState {
   tasks: Task[];
   selectedTask: Task | null;
   setTasks: (tasks: Task[]) => void;

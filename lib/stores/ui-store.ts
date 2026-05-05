@@ -4,10 +4,10 @@ import { create } from 'zustand';
 
 type ViewType = 'dashboard' | 'kanban' | 'list';
 
-interface UIState {
-  sidebarOpen: boolean;
-  taskDialogOpen: boolean;
-  projectDialogOpen: boolean;
+export interface UIState {
+  isSidebarOpen: boolean;
+  isTaskDialogOpen: boolean;
+  isProjectDialogOpen: boolean;
   activeView: ViewType;
   toggleSidebar: () => void;
   setSidebarOpen: (open: boolean) => void;
@@ -21,20 +21,20 @@ interface UIState {
 }
 
 export const useUIStore = create<UIState>((set) => ({
-  sidebarOpen: true,
-  taskDialogOpen: false,
-  projectDialogOpen: false,
+  isSidebarOpen: true,
+  isTaskDialogOpen: false,
+  isProjectDialogOpen: false,
   activeView: 'dashboard',
   toggleSidebar: () =>
     set((state) => ({
-      sidebarOpen: !state.sidebarOpen,
+      isSidebarOpen: !state.isSidebarOpen,
     })),
-  setSidebarOpen: (open) => set({ sidebarOpen: open }),
-  openTaskDialog: () => set({ taskDialogOpen: true }),
-  closeTaskDialog: () => set({ taskDialogOpen: false }),
-  setTaskDialogOpen: (open) => set({ taskDialogOpen: open }),
-  openProjectDialog: () => set({ projectDialogOpen: true }),
-  closeProjectDialog: () => set({ projectDialogOpen: false }),
-  setProjectDialogOpen: (open) => set({ projectDialogOpen: open }),
+  setSidebarOpen: (open) => set({ isSidebarOpen: open }),
+  openTaskDialog: () => set({ isTaskDialogOpen: true }),
+  closeTaskDialog: () => set({ isTaskDialogOpen: false }),
+  setTaskDialogOpen: (open) => set({ isTaskDialogOpen: open }),
+  openProjectDialog: () => set({ isProjectDialogOpen: true }),
+  closeProjectDialog: () => set({ isProjectDialogOpen: false }),
+  setProjectDialogOpen: (open) => set({ isProjectDialogOpen: open }),
   setActiveView: (view) => set({ activeView: view }),
 }));

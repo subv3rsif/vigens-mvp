@@ -4,7 +4,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { User, Session } from '@supabase/supabase-js';
 
-interface AuthState {
+export interface AuthState {
   user: User | null;
   session: Session | null;
   isLoading: boolean;
@@ -27,6 +27,11 @@ export const useAuthStore = create<AuthState>()(
     }),
     {
       name: 'vigens-auth',
+      partialize: (state) => ({
+        user: state.user,
+        isLoading: state.isLoading,
+        // session excluded for security
+      }),
     }
   )
 );
