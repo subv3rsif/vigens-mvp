@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import React, { useState } from 'react'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { createClient } from '../../../lib/supabase/client'
 
@@ -11,7 +12,7 @@ export default function SignupPage() {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
-  const handleSignup = async (e: React.FormEvent) => {
+  const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setError(null)
     setLoading(true)
@@ -96,9 +97,9 @@ export default function SignupPage() {
 
       <p className="mt-6 text-center text-sm text-text-secondary">
         Déjà un compte ?{' '}
-        <a href="/login" className="text-accent-blue hover:underline">
+        <Link href="/login" className="text-accent-blue hover:underline">
           Se connecter
-        </a>
+        </Link>
       </p>
     </div>
   )
