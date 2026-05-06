@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { ChevronRight } from 'lucide-react'
+import { createClient } from '@/lib/supabase/client'
 import { useSubtasks } from '@/lib/hooks/use-subtasks'
 import { SubtaskItem } from './subtask-item'
 import { AddSubtaskInput } from './add-subtask-input'
@@ -12,7 +13,7 @@ interface SubtaskListProps {
 
 export function SubtaskList({ taskId }: SubtaskListProps) {
   const [isExpanded, setIsExpanded] = useState(false)
-  const { subtasks, isLoading, createSubtask, updateSubtask, deleteSubtask } = useSubtasks(taskId)
+  const { subtasks, createSubtask, updateSubtask, deleteSubtask } = useSubtasks(taskId)
 
   const completedCount = subtasks.filter(s => s.completed).length
   const totalCount = subtasks.length
@@ -24,13 +25,25 @@ export function SubtaskList({ taskId }: SubtaskListProps) {
     return 'text-text-secondary'
   }
 
-  const handleAddSubtask = (title: string) => {
-    createSubtask.mutate({
-      task_id: taskId,
-      title,
-      completed: false,
-      position: subtasks.length
-    })
+  const handleAddSubtask = async (title: string) => {
+    try {
+      const supabase = createClient()
+      const { data: { session } } = await supabase.auth.getSession()
+
+      if (!session?.user?.id) {
+        throw new Error('User not authenticated')
+      }
+
+      createSubtask.mutate({
+        task_id: taskId,
+        user_id: session.user.id,
+        title,
+        completed: false,
+        position: subtasks.length
+      })
+    } catch (error) {
+      console.error('Error adding subtask:', error)
+    }
   }
 
   const handleToggle = (id: string, completed: boolean) => {

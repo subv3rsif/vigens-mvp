@@ -14,9 +14,9 @@ const wrapper = ({ children }: { children: React.ReactNode }) => {
 
 describe('SubtaskList', () => {
   const mockSubtasks = [
-    { id: '1', task_id: 'task-1', title: 'Subtask 1', completed: false, position: 0, created_at: '' },
-    { id: '2', task_id: 'task-1', title: 'Subtask 2', completed: true, position: 1, created_at: '' },
-    { id: '3', task_id: 'task-1', title: 'Subtask 3', completed: true, position: 2, created_at: '' }
+    { id: '1', task_id: 'task-1', user_id: 'user-1', title: 'Subtask 1', completed: false, position: 0, created_at: '', updated_at: '' },
+    { id: '2', task_id: 'task-1', user_id: 'user-1', title: 'Subtask 2', completed: true, position: 1, created_at: '', updated_at: '' },
+    { id: '3', task_id: 'task-1', user_id: 'user-1', title: 'Subtask 3', completed: true, position: 2, created_at: '', updated_at: '' }
   ]
 
   const mockUseSubtasks = {
