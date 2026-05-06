@@ -20,6 +20,7 @@ import { EmptyState } from '../../../../../components/ui/empty-state';
 import { KanbanColumn } from '../../../../../components/kanban/kanban-column';
 import { TaskCard } from '../../../../../components/kanban/task-card';
 import { CreateTaskDialog } from '../../../../../components/kanban/create-task-dialog';
+import { TaskDetailsDialog } from '../../../../../components/kanban/task-details-dialog';
 import { COLUMN_CONFIGS, ColumnStatusType } from '../../../../../types/kanban.types';
 import { Task } from '../../../../../types/database.types';
 
@@ -37,6 +38,8 @@ export default function BoardPage({ params }: BoardPageProps) {
   const [activeTask, setActiveTask] = useState<Task | null>(null);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [selectedColumnStatus, setSelectedColumnStatus] = useState<ColumnStatusType>('todo');
+  const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
+  const [isDetailsDialogOpen, setIsDetailsDialogOpen] = useState(false);
 
   // Find the project
   const project = projects.find((p) => p.id === id);
@@ -118,6 +121,12 @@ export default function BoardPage({ params }: BoardPageProps) {
     setIsCreateDialogOpen(true);
   };
 
+  // Handler for opening task details
+  const handleTaskClick = (taskId: string) => {
+    setSelectedTaskId(taskId);
+    setIsDetailsDialogOpen(true);
+  };
+
   return (
     <DndContext
       sensors={sensors}
@@ -162,7 +171,7 @@ export default function BoardPage({ params }: BoardPageProps) {
                 <TaskCard
                   key={task.id}
                   task={task}
-                  onClick={() => toast.info('Détails de la tâche à venir')}
+                  onClick={() => handleTaskClick(task.id)}
                 />
               ))}
             </KanbanColumn>
@@ -180,6 +189,14 @@ export default function BoardPage({ params }: BoardPageProps) {
         initialStatus={selectedColumnStatus}
         open={isCreateDialogOpen}
         onOpenChange={setIsCreateDialogOpen}
+      />
+
+      {/* Task Details Dialog */}
+      <TaskDetailsDialog
+        taskId={selectedTaskId}
+        projectId={id}
+        open={isDetailsDialogOpen}
+        onOpenChange={setIsDetailsDialogOpen}
       />
     </DndContext>
   );
