@@ -3,9 +3,9 @@
 import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { Menu, User, LogOut } from 'lucide-react';
-import { createClient } from '@/lib/supabase/client';
-import { useUIStore } from '@/lib/stores/ui-store';
-import { Button } from '@/components/ui/button';
+import { createClient } from '../../lib/supabase/client';
+import { useUIStore } from '../../lib/stores/ui-store';
+import { Button } from '../ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,7 +13,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from '../ui/dropdown-menu';
 
 // Map pathnames to page titles
 const getPageTitle = (pathname: string | null): string => {

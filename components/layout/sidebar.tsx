@@ -3,9 +3,9 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { LayoutDashboard, FolderKanban, X } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { useUIStore } from '@/lib/stores/ui-store';
-import { Button } from '@/components/ui/button';
+import { cn } from '../../lib/utils';
+import { useUIStore } from '../../lib/stores/ui-store';
+import { Button } from '../ui/button';
 
 const navItems = [
   {
