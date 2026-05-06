@@ -26,6 +26,7 @@ import {
   SelectValue,
 } from '../ui/select';
 import { ConfirmDialog } from '../projects/confirm-dialog';
+import { SubtaskList } from '../tasks/subtask-list';
 import { useTasks } from '../../lib/hooks/use-tasks';
 import { Task } from '../../types/database.types';
 import { PRIORITY_CONFIGS, TaskPriorityType, getPriorityConfig } from '../../types/task.types';
@@ -370,6 +371,9 @@ export function TaskDetailsDialog({
                   </p>
                 </div>
               </div>
+
+              {/* Subtasks section */}
+              <SubtaskList taskId={task.id} />
 
               <DialogFooter>
                 <Button
