@@ -58,7 +58,7 @@ export function CreateTaskDialog({
         title: data.title,
         description: data.description || null,
         status: initialStatus,
-        priority: data.priority,
+        priority: data.priority || 'medium',
         due_date: data.due_date || null,
         position,
       };

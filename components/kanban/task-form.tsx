@@ -27,7 +27,7 @@ const taskFormSchema = z.object({
     .string()
     .max(1000, 'La description ne peut pas dépasser 1000 caractères')
     .optional(),
-  priority: z.enum(['low', 'medium', 'high']),
+  priority: z.enum(['low', 'medium', 'high']).optional(),
   due_date: z.string().optional(),
 });
 
