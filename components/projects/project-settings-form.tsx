@@ -5,14 +5,14 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useRouter } from 'next/navigation';
-import { UseMutationResult } from '@tanstack/react-query';
 import { Archive, Trash2 } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Textarea } from '../ui/textarea';
 import { ConfirmDialog } from './confirm-dialog';
-import { Project, ProjectUpdate } from '../../types/database.types';
+import { Project } from '../../types/database.types';
+import { useProjects } from '../../lib/hooks/use-projects';
 
 // Zod validation schema
 const projectSettingsSchema = z.object({
@@ -36,25 +36,16 @@ export type ProjectSettingsData = z.infer<typeof projectSettingsSchema>;
 interface ProjectSettingsFormProps {
   project: Project;
   onUpdate: (id: string, data: ProjectSettingsData) => void;
-  onArchive: (id: string) => void;
-  onDelete: (id: string) => void;
   isUpdating?: boolean;
-  isDeleting?: boolean;
-  updateProjectMutation: UseMutationResult<Project, Error, { id: string; updates: ProjectUpdate }, { previousProjects?: Project[] }>;
-  deleteProjectMutation: UseMutationResult<void, Error, string, { previousProjects?: Project[] }>;
 }
 
 export function ProjectSettingsForm({
   project,
   onUpdate,
-  onArchive,
-  onDelete,
   isUpdating,
-  isDeleting,
-  updateProjectMutation,
-  deleteProjectMutation,
 }: ProjectSettingsFormProps) {
   const router = useRouter();
+  const { updateProjectMutation, deleteProjectMutation, isDeleting } = useProjects();
   const [showArchiveDialog, setShowArchiveDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 

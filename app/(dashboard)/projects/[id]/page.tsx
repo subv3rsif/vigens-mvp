@@ -22,11 +22,7 @@ export default function ProjectSettingsPage({ params }: ProjectSettingsPageProps
     projects,
     isLoading,
     updateProject,
-    deleteProject,
     isUpdating,
-    isDeleting,
-    updateProjectMutation,
-    deleteProjectMutation,
   } = useProjects();
 
   // Find the project
@@ -69,19 +65,6 @@ export default function ProjectSettingsPage({ params }: ProjectSettingsPageProps
     });
   };
 
-  const handleArchive = (projectId: string) => {
-    updateProject({
-      id: projectId,
-      updates: {
-        archived: true,
-      },
-    });
-  };
-
-  const handleDelete = (projectId: string) => {
-    deleteProject(projectId);
-  };
-
   return (
     <div className="space-y-6">
       {/* Header with back button */}
@@ -115,12 +98,7 @@ export default function ProjectSettingsPage({ params }: ProjectSettingsPageProps
             <ProjectSettingsForm
               project={project}
               onUpdate={handleUpdate}
-              onArchive={handleArchive}
-              onDelete={handleDelete}
               isUpdating={isUpdating}
-              isDeleting={isDeleting}
-              updateProjectMutation={updateProjectMutation}
-              deleteProjectMutation={deleteProjectMutation}
             />
           </div>
         </TabsContent>
