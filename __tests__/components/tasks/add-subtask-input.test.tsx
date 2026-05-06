@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { AddSubtaskInput } from '../../../components/tasks/add-subtask-input'
+import { AddSubtaskInput } from '@/components/tasks/add-subtask-input'
 
 describe('AddSubtaskInput', () => {
   const mockOnAdd = vi.fn()
