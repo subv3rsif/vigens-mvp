@@ -88,7 +88,9 @@ export function useSubtasks(taskId: string) {
         user_id: newSubtask.user_id,
         title: newSubtask.title,
         completed: newSubtask.completed || false,
-        position: newSubtask.position || (previousSubtasks?.length || 0),
+        position: newSubtask.position || (previousSubtasks && previousSubtasks.length > 0
+          ? Math.max(...previousSubtasks.map(s => s.position || 0)) + 1
+          : 0),
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       };
