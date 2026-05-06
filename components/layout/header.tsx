@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { Menu, User, LogOut } from 'lucide-react';
 import { createClient } from '../../lib/supabase/client';
@@ -32,7 +32,7 @@ export function Header() {
   const [userEmail, setUserEmail] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
 
   useEffect(() => {
     const getUser = async () => {
@@ -43,7 +43,7 @@ export function Header() {
     };
 
     getUser();
-  }, [supabase]);
+  }, []);
 
   const handleLogout = async () => {
     setIsLoading(true);
@@ -79,7 +79,7 @@ export function Header() {
 
         {/* Right side: User menu */}
         <DropdownMenu>
-          <DropdownMenuTrigger>
+          <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
               size="icon"

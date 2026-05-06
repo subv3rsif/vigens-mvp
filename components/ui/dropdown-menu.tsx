@@ -3,7 +3,7 @@
 import * as React from "react"
 import { Menu as MenuPrimitive } from "@base-ui/react/menu"
 
-import { cn } from "@/lib/utils"
+import { cn } from "../../lib/utils"
 import { ChevronRightIcon, CheckIcon } from "lucide-react"
 
 function DropdownMenu({ ...props }: MenuPrimitive.Root.Props) {
@@ -14,8 +14,25 @@ function DropdownMenuPortal({ ...props }: MenuPrimitive.Portal.Props) {
   return <MenuPrimitive.Portal data-slot="dropdown-menu-portal" {...props} />
 }
 
-function DropdownMenuTrigger({ ...props }: MenuPrimitive.Trigger.Props) {
-  return <MenuPrimitive.Trigger data-slot="dropdown-menu-trigger" {...props} />
+type DropdownMenuTriggerProps = MenuPrimitive.Trigger.Props & { asChild?: boolean }
+
+function DropdownMenuTrigger({
+  asChild,
+  children,
+  ...props
+}: DropdownMenuTriggerProps) {
+  if (asChild && React.isValidElement(children)) {
+    const childProps = (children as React.ReactElement<any>).props || {}
+    return (
+      <MenuPrimitive.Trigger {...props}>
+        {React.cloneElement(children as React.ReactElement<any>, {
+          ...childProps,
+          ref: undefined,
+        })}
+      </MenuPrimitive.Trigger>
+    )
+  }
+  return <MenuPrimitive.Trigger data-slot="dropdown-menu-trigger" {...props}>{children}</MenuPrimitive.Trigger>
 }
 
 function DropdownMenuContent({
