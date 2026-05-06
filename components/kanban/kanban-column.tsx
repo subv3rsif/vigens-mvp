@@ -1,11 +1,13 @@
 'use client';
 
 import { Plus } from 'lucide-react';
+import { useDroppable } from '@dnd-kit/core';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
 
 interface KanbanColumnProps {
+  id: string;
   title: string;
   taskCount: number;
   onAddTask: () => void;
@@ -14,6 +16,7 @@ interface KanbanColumnProps {
 }
 
 export function KanbanColumn({
+  id,
   title,
   taskCount,
   onAddTask,
@@ -21,9 +24,15 @@ export function KanbanColumn({
   children,
 }: KanbanColumnProps) {
   const isEmpty = taskCount === 0;
+  const { setNodeRef, isOver } = useDroppable({ id });
 
   return (
-    <Card className="flex flex-col h-full min-h-[400px] border-border">
+    <Card
+      ref={setNodeRef}
+      className={`flex flex-col h-full min-h-[400px] border-border transition-colors ${
+        isOver ? 'ring-2 ring-primary' : ''
+      }`}
+    >
       <CardHeader className="border-b border-border pb-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
