@@ -153,6 +153,7 @@ export function useSubtasks(taskId: string) {
       // Guard against undefined context
       if (!context) return;
 
+      queryClient.invalidateQueries({ queryKey });
       toast.success('Sous-tâche mise à jour');
     },
     onError: (_, __, context) => {
@@ -185,6 +186,7 @@ export function useSubtasks(taskId: string) {
       // Guard against undefined context
       if (!context) return;
 
+      queryClient.invalidateQueries({ queryKey });
       toast.success('Sous-tâche supprimée');
     },
     onError: (_, __, context) => {
