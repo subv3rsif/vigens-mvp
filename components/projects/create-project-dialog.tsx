@@ -19,13 +19,11 @@ import { createClient } from '../../lib/supabase/client';
 interface CreateProjectDialogProps {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
-  trigger?: React.ReactElement;
 }
 
 export function CreateProjectDialog({
   open: controlledOpen,
   onOpenChange: controlledOnOpenChange,
-  trigger
 }: CreateProjectDialogProps = {}) {
   const [internalOpen, setInternalOpen] = useState(false);
   const { createProject, isCreating } = useProjects();
@@ -72,18 +70,14 @@ export function CreateProjectDialog({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      {trigger ? (
-        <DialogTrigger render={trigger} />
-      ) : (
-        <DialogTrigger
-          render={
-            <Button className="gap-2">
-              <Plus className="h-4 w-4" />
-              Nouveau projet
-            </Button>
-          }
-        />
-      )}
+      <DialogTrigger
+        render={
+          <Button className="gap-2">
+            <Plus className="h-4 w-4" />
+            Nouveau projet
+          </Button>
+        }
+      />
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Créer un projet</DialogTitle>
