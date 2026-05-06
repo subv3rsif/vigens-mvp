@@ -4,6 +4,7 @@ import { Calendar } from 'lucide-react';
 import { useDraggable } from '@dnd-kit/core';
 import { Task } from '../../types/database.types';
 import { getPriorityConfig } from '../../types/task.types';
+import { useSubtasks } from '../../lib/hooks/use-subtasks';
 
 interface TaskCardProps {
   task: Task;
@@ -12,6 +13,18 @@ interface TaskCardProps {
 
 export function TaskCard({ task, onClick }: TaskCardProps) {
   const priorityConfig = task.priority ? getPriorityConfig(task.priority) : null;
+  const { subtasks } = useSubtasks(task.id);
+
+  const completedCount = subtasks.filter(s => s.completed).length;
+  const totalCount = subtasks.length;
+  const hasSubtasks = totalCount > 0;
+
+  const getBadgeColor = () => {
+    if (completedCount === totalCount) return 'text-success bg-success/10';
+    if (completedCount > 0) return 'text-warning bg-warning/10';
+    return 'text-text-secondary bg-card';
+  };
+
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id: task.id,
   });
@@ -40,8 +53,8 @@ export function TaskCard({ task, onClick }: TaskCardProps) {
 
       {/* Footer */}
       <div className="flex items-center justify-between gap-2 text-xs">
-        {/* Priority indicator */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
+          {/* Priority indicator */}
           {priorityConfig && (
             <div className="flex items-center gap-1.5">
               <div
@@ -50,6 +63,13 @@ export function TaskCard({ task, onClick }: TaskCardProps) {
               />
               <span className="text-muted-foreground">{priorityConfig.label}</span>
             </div>
+          )}
+
+          {/* Subtask badge */}
+          {hasSubtasks && (
+            <span className={`px-2 py-0.5 rounded font-medium ${getBadgeColor()}`}>
+              ✓ {completedCount}/{totalCount}
+            </span>
           )}
         </div>
 
