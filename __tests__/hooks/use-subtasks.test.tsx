@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { renderHook, waitFor, act } from '@testing-library/react'
+import { renderHook, waitFor } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { useSubtasks } from '../../lib/hooks/use-subtasks'
-import { Subtask, SubtaskInsert, SubtaskUpdate } from '../../types/database.types'
+import { useSubtasks } from '@/lib/hooks/use-subtasks'
+import { Subtask } from '../../types/database.types'
 import { ReactNode } from 'react'
 
 // Mock the Supabase client
