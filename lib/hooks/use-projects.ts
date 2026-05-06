@@ -69,7 +69,7 @@ export function useProjects() {
     useProjectStore();
 
   // Fetch projects
-  const { data: projects = [], isLoading } = useQuery({
+  const { data: projects = [], isLoading, error } = useQuery({
     queryKey: PROJECTS_QUERY_KEY,
     queryFn: fetchProjects,
     enabled: true,
@@ -232,6 +232,7 @@ export function useProjects() {
   return {
     projects,
     isLoading,
+    error,
     createProject: createMutation.mutate,
     updateProject: updateMutation.mutate,
     deleteProject: deleteMutation.mutate,
