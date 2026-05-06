@@ -71,12 +71,12 @@ export function CreateProjectDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger
-        render={
-          <Button className="gap-2">
+        render={(props) => (
+          <Button {...props} className="gap-2">
             <Plus className="h-4 w-4" />
             Nouveau projet
           </Button>
-        }
+        )}
       />
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
