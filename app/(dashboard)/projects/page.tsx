@@ -1,14 +1,17 @@
 'use client';
 
-import { FolderKanban, Plus } from "lucide-react";
+import { useState } from "react";
+import { FolderKanban } from "lucide-react";
 import { toast } from "sonner";
 import { useProjects } from "../../../lib/hooks/use-projects";
-import { Button } from "../../../components/ui/button";
 import { EmptyState } from "../../../components/ui/empty-state";
 import { ProjectList } from "../../../components/projects/project-list";
+import { CreateProjectDialog } from "../../../components/projects/create-project-dialog";
+import { Button } from "../../../components/ui/button";
 
 export default function ProjectsPage() {
   const { projects, isLoading, error } = useProjects();
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   return (
     <div className="space-y-6">
@@ -21,13 +24,7 @@ export default function ProjectsPage() {
             Gérez tous vos projets en un seul endroit.
           </p>
         </div>
-        <Button
-          onClick={() => toast.info("Fonctionnalité à venir")}
-          className="gap-2"
-        >
-          <Plus className="h-4 w-4" />
-          Nouveau projet
-        </Button>
+        <CreateProjectDialog />
       </div>
 
       {isLoading ? (
@@ -46,16 +43,23 @@ export default function ProjectsPage() {
           }}
         />
       ) : projects.length === 0 ? (
-        <EmptyState
-          icon={FolderKanban}
-          title="Aucun projet"
-          description="Créez votre premier projet pour commencer à organiser vos tâches."
-          action={{
-            label: "Créer un projet",
-            onClick: () => toast.info("Fonctionnalité à venir"),
-            variant: "outline",
-          }}
-        />
+        <>
+          <EmptyState
+            icon={FolderKanban}
+            title="Aucun projet"
+            description="Créez votre premier projet pour commencer à organiser vos tâches."
+            action={{
+              label: "Créer un projet",
+              onClick: () => setDialogOpen(true),
+              variant: "outline",
+            }}
+          />
+          <CreateProjectDialog
+            open={dialogOpen}
+            onOpenChange={setDialogOpen}
+            trigger={<Button style={{ display: 'none' }} />}
+          />
+        </>
       ) : (
         <ProjectList projects={projects} />
       )}
