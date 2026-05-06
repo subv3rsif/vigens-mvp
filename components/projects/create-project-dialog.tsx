@@ -86,6 +86,7 @@ export function CreateProjectDialog({
           </DialogDescription>
         </DialogHeader>
         <ProjectForm
+          key={open ? 'open' : 'closed'}
           onSubmit={handleSubmit}
           onCancel={handleCancel}
           isSubmitting={isCreating}
