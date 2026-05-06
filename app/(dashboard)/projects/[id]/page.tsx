@@ -6,7 +6,7 @@ import { ArrowLeft, Settings } from 'lucide-react';
 import { useProjects } from '../../../../lib/hooks/use-projects';
 import { Button } from '../../../../components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../../../components/ui/tabs';
-import { ProjectSettingsForm } from '../../../../components/projects/project-settings-form';
+import { ProjectSettingsForm, ProjectSettingsData } from '../../../../components/projects/project-settings-form';
 import { EmptyState } from '../../../../components/ui/empty-state';
 
 interface ProjectSettingsPageProps {
@@ -25,6 +25,8 @@ export default function ProjectSettingsPage({ params }: ProjectSettingsPageProps
     deleteProject,
     isUpdating,
     isDeleting,
+    updateProjectMutation,
+    deleteProjectMutation,
   } = useProjects();
 
   // Find the project
@@ -55,7 +57,7 @@ export default function ProjectSettingsPage({ params }: ProjectSettingsPageProps
     );
   }
 
-  const handleUpdate = (projectId: string, data: any) => {
+  const handleUpdate = (projectId: string, data: ProjectSettingsData) => {
     updateProject({
       id: projectId,
       updates: {
@@ -117,6 +119,8 @@ export default function ProjectSettingsPage({ params }: ProjectSettingsPageProps
               onDelete={handleDelete}
               isUpdating={isUpdating}
               isDeleting={isDeleting}
+              updateProjectMutation={updateProjectMutation}
+              deleteProjectMutation={deleteProjectMutation}
             />
           </div>
         </TabsContent>

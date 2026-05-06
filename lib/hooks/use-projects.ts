@@ -239,5 +239,7 @@ export function useProjects() {
     isCreating: createMutation.isPending,
     isUpdating: updateMutation.isPending,
     isDeleting: deleteMutation.isPending,
+    updateProjectMutation: updateMutation,
+    deleteProjectMutation: deleteMutation,
   };
 }

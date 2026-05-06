@@ -5,13 +5,14 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useRouter } from 'next/navigation';
+import { UseMutationResult } from '@tanstack/react-query';
 import { Archive, Trash2 } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Textarea } from '../ui/textarea';
 import { ConfirmDialog } from './confirm-dialog';
-import { Project } from '../../types/database.types';
+import { Project, ProjectUpdate } from '../../types/database.types';
 
 // Zod validation schema
 const projectSettingsSchema = z.object({
@@ -39,6 +40,8 @@ interface ProjectSettingsFormProps {
   onDelete: (id: string) => void;
   isUpdating?: boolean;
   isDeleting?: boolean;
+  updateProjectMutation: UseMutationResult<Project, Error, { id: string; updates: ProjectUpdate }, { previousProjects?: Project[] }>;
+  deleteProjectMutation: UseMutationResult<void, Error, string, { previousProjects?: Project[] }>;
 }
 
 export function ProjectSettingsForm({
@@ -48,6 +51,8 @@ export function ProjectSettingsForm({
   onDelete,
   isUpdating,
   isDeleting,
+  updateProjectMutation,
+  deleteProjectMutation,
 }: ProjectSettingsFormProps) {
   const router = useRouter();
   const [showArchiveDialog, setShowArchiveDialog] = useState(false);
@@ -72,15 +77,30 @@ export function ProjectSettingsForm({
   };
 
   const handleArchive = () => {
-    onArchive(project.id);
-    setShowArchiveDialog(false);
-    router.push('/projects');
+    updateProjectMutation.mutate(
+      { id: project.id, updates: { archived: true } },
+      {
+        onSuccess: () => {
+          router.push('/projects');
+        },
+        onError: () => {
+          // Error toast already shown by useProjects hook
+          setShowArchiveDialog(false);
+        }
+      }
+    );
   };
 
   const handleDelete = () => {
-    onDelete(project.id);
-    setShowDeleteDialog(false);
-    router.push('/projects');
+    deleteProjectMutation.mutate(project.id, {
+      onSuccess: () => {
+        router.push('/projects');
+      },
+      onError: () => {
+        // Error toast already shown by useProjects hook
+        setShowDeleteDialog(false);
+      }
+    });
   };
 
   return (
