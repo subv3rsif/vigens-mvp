@@ -1,6 +1,6 @@
 'use client';
 
-import { use, useMemo } from 'react';
+import { use, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 import { toast } from 'sonner';
@@ -19,9 +19,9 @@ import { Button } from '../../../../../components/ui/button';
 import { EmptyState } from '../../../../../components/ui/empty-state';
 import { KanbanColumn } from '../../../../../components/kanban/kanban-column';
 import { TaskCard } from '../../../../../components/kanban/task-card';
+import { CreateTaskDialog } from '../../../../../components/kanban/create-task-dialog';
 import { COLUMN_CONFIGS, ColumnStatusType } from '../../../../../types/kanban.types';
 import { Task } from '../../../../../types/database.types';
-import { useState } from 'react';
 
 interface BoardPageProps {
   params: Promise<{
@@ -35,6 +35,8 @@ export default function BoardPage({ params }: BoardPageProps) {
   const { projects, isLoading: projectsLoading } = useProjects();
   const { tasks, isLoading: tasksLoading, updateTask } = useTasks(id);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [selectedColumnStatus, setSelectedColumnStatus] = useState<ColumnStatusType>('todo');
 
   // Find the project
   const project = projects.find((p) => p.id === id);
@@ -110,11 +112,10 @@ export default function BoardPage({ params }: BoardPageProps) {
     });
   };
 
-  // Placeholder handler for adding tasks
-  const handleAddTask = (columnTitle: string) => {
-    toast.info(`Ajout d'une tâche dans "${columnTitle}"`, {
-      description: 'Cette fonctionnalité sera disponible prochainement.',
-    });
+  // Handler for adding tasks
+  const handleAddTask = (columnStatus: ColumnStatusType) => {
+    setSelectedColumnStatus(columnStatus);
+    setIsCreateDialogOpen(true);
   };
 
   return (
@@ -155,7 +156,7 @@ export default function BoardPage({ params }: BoardPageProps) {
               title={column.title}
               taskCount={tasksByStatus[column.id]?.length || 0}
               color={column.color}
-              onAddTask={() => handleAddTask(column.title)}
+              onAddTask={() => handleAddTask(column.id)}
             >
               {tasksByStatus[column.id]?.map((task) => (
                 <TaskCard
@@ -170,10 +171,16 @@ export default function BoardPage({ params }: BoardPageProps) {
       </div>
 
       <DragOverlay>
-        {activeTask && (
-          <TaskCard task={activeTask} />
-        )}
+        {activeTask && <TaskCard task={activeTask} />}
       </DragOverlay>
+
+      {/* Create Task Dialog */}
+      <CreateTaskDialog
+        projectId={id}
+        initialStatus={selectedColumnStatus}
+        open={isCreateDialogOpen}
+        onOpenChange={setIsCreateDialogOpen}
+      />
     </DndContext>
   );
 }
