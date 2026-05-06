@@ -15,7 +15,7 @@ import { CreateTaskDialog } from '../../../components/kanban/create-task-dialog'
 import { TaskDetailsDialog } from '../../../components/kanban/task-details-dialog';
 import { Task } from '../../../types/database.types';
 import { getPriorityConfig } from '../../../types/task.types';
-import { ColumnStatus, getColumnConfig } from '../../../types/kanban.types';
+import { ColumnStatus, ColumnStatusType, getColumnConfig } from '../../../types/kanban.types';
 
 export default function DashboardPage() {
   const { projects, isLoading: projectsLoading } = useProjects();
@@ -200,7 +200,7 @@ export default function DashboardPage() {
               const priorityConfig = task.priority
                 ? getPriorityConfig(task.priority)
                 : null;
-              const statusConfig = getColumnConfig(task.status as any);
+              const statusConfig = getColumnConfig(task.status as ColumnStatusType);
               const projectName = getProjectName(task.project_id);
               const projectIcon = getProjectIcon(task.project_id);
 
