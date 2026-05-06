@@ -91,6 +91,9 @@ export default function ProjectSettingsPage({ params }: ProjectSettingsPageProps
       <Tabs defaultValue="settings">
         <TabsList>
           <TabsTrigger value="settings">Paramètres</TabsTrigger>
+          <TabsTrigger value="board" onClick={() => router.push(`/projects/${id}/board`)}>
+            Tableau
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="settings" className="mt-6">
