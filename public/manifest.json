@@ -1,0 +1,26 @@
+{
+  "name": "Vigens - Gestionnaire de Tâches",
+  "short_name": "Vigens",
+  "description": "Gestionnaire de projets et tâches minimaliste",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f0f0f",
+  "theme_color": "#0f0f0f",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "orientation": "any",
+  "categories": ["productivity", "utilities"],
+  "lang": "fr-FR"
+}
