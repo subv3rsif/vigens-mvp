@@ -10,6 +10,7 @@ interface EmptyStateProps {
   action?: {
     label: string
     onClick: () => void
+    variant?: "default" | "outline" | "secondary" | "ghost"
   }
   className?: string
 }
@@ -23,6 +24,7 @@ function EmptyState({
 }: EmptyStateProps) {
   return (
     <div
+      role="status"
       className={cn(
         "flex flex-col items-center justify-center gap-4 py-12 px-4",
         className
@@ -44,6 +46,7 @@ function EmptyState({
       {action && (
         <Button
           onClick={action.onClick}
+          variant={action.variant ?? "outline"}
           className="mt-2"
         >
           {action.label}
