@@ -100,6 +100,7 @@ export function useProjects() {
         user_id: newProject.user_id,
         name: newProject.name,
         description: newProject.description || null,
+        budget: null,
         color: newProject.color || '#3b82f6',
         icon: newProject.icon || '📁',
         archived: false,

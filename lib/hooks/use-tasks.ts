@@ -110,6 +110,7 @@ export function useTasks(projectId?: string) {
         description: newTask.description || null,
         status: newTask.status || 'todo',
         priority: newTask.priority || 'medium',
+        cost: null,
         due_date: newTask.due_date || null,
         assigned_to: newTask.assigned_to || null,
         position: newTask.position || 0,
