@@ -321,6 +321,7 @@ describe('FileUpload', () => {
       const uploadZone = screen.getByRole('button');
       expect(uploadZone).toHaveClass('pointer-events-none');
       expect(uploadZone).toHaveClass('opacity-50');
+      expect(uploadZone).toHaveAttribute('aria-disabled', 'true');
     });
 
     it('should call onUploadComplete after successful upload', async () => {

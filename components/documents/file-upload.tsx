@@ -56,6 +56,7 @@ export function FileUpload({ taskId, onUploadComplete }: FileUploadProps) {
         await uploadFile.mutateAsync({ file, taskId })
         uploadedCount++
       } catch (error) {
+        console.error('File upload error:', error);
         // Error already shown by hook via toast
       }
     }
@@ -130,7 +131,7 @@ export function FileUpload({ taskId, onUploadComplete }: FileUploadProps) {
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
-        disabled={uploadFile.isPending}
+        aria-disabled={uploadFile.isPending}
         className={cn(
           'flex flex-col items-center justify-center rounded-lg border-2 border-dashed p-12 transition-colors cursor-pointer',
           isDragOver
