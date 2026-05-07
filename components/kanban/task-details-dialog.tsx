@@ -45,7 +45,7 @@ const taskFormSchema = z.object({
   status: z.enum(['todo', 'in_progress', 'done']),
   priority: z.enum(['low', 'medium', 'high']).optional(),
   due_date: z.string().optional(),
-  cost: z.coerce.number().min(0).optional(),
+  cost: z.string().optional(),
 });
 
 type TaskFormData = z.infer<typeof taskFormSchema>;
@@ -86,7 +86,7 @@ export function TaskDetailsDialog({
           status: task.status as ColumnStatusType,
           priority: task.priority as TaskPriorityType,
           due_date: task.due_date || '',
-          cost: task.cost || '',
+          cost: task.cost ? String(task.cost) : '',
         }
       : undefined,
   });

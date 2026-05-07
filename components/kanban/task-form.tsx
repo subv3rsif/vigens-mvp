@@ -29,7 +29,7 @@ const taskFormSchema = z.object({
     .optional(),
   priority: z.enum(['low', 'medium', 'high']).optional(),
   due_date: z.string().optional(),
-  cost: z.coerce.number().min(0).optional(),
+  cost: z.string().optional(),
 });
 
 export type TaskFormData = z.infer<typeof taskFormSchema>;
