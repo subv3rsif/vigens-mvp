@@ -36,8 +36,8 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="bg-card p-8 rounded-lg shadow-lg border border-border">
-      <h1 className="text-h2 mb-6 text-center">Connexion à Vigens</h1>
+    <div className="w-full bg-card p-8 rounded-lg shadow-lg border border-border">
+      <h1 className="text-2xl font-bold mb-6 text-center">Connexion à Vigens</h1>
 
       <form onSubmit={handleLogin} className="space-y-4">
         <div>

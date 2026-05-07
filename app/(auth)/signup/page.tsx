@@ -45,8 +45,8 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="bg-card p-8 rounded-lg shadow-lg border border-border">
-      <h1 className="text-h2 mb-6 text-center">Créer un compte Vigens</h1>
+    <div className="w-full bg-card p-8 rounded-lg shadow-lg border border-border">
+      <h1 className="text-2xl font-bold mb-6 text-center">Créer un compte Vigens</h1>
 
       <form onSubmit={handleSignup} className="space-y-4">
         <div>
