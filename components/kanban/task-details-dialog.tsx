@@ -27,6 +27,7 @@ import {
 } from '../ui/select';
 import { ConfirmDialog } from '../projects/confirm-dialog';
 import { SubtaskList } from '../tasks/subtask-list';
+import { DocumentTabs } from '../documents/document-tabs';
 import { useTasks } from '../../lib/hooks/use-tasks';
 import { Task } from '../../types/database.types';
 import { PRIORITY_CONFIGS, TaskPriorityType, getPriorityConfig } from '../../types/task.types';
@@ -404,6 +405,12 @@ export function TaskDetailsDialog({
 
               {/* Subtasks section */}
               <SubtaskList taskId={task.id} />
+
+              {/* Documents section */}
+              <div className="space-y-4 pt-4 border-t">
+                <h3 className="text-sm font-semibold text-foreground">Documents</h3>
+                <DocumentTabs taskId={task.id} />
+              </div>
 
               <DialogFooter>
                 <Button
