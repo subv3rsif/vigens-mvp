@@ -49,6 +49,7 @@ export function CreateProjectDialog({
           user_id: userId,
           name: data.name,
           description: data.description || null,
+          budget: data.budget ? Number(data.budget) : null,
           icon: data.icon || '📁',
           color: data.color || '#3b82f6',
         },

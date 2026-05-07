@@ -19,6 +19,7 @@ const projectFormSchema = z.object({
     .max(500, 'Maximum 500 caractères')
     .optional()
     .or(z.literal('')),
+  budget: z.string().optional(),
   icon: z
     .string()
     .max(2, 'Maximum 2 caractères'),
@@ -45,6 +46,7 @@ export function ProjectForm({ onSubmit, onCancel, isSubmitting }: ProjectFormPro
     defaultValues: {
       name: '',
       description: '',
+      budget: '',
       icon: '📁',
       color: '#3b82f6',
     },
@@ -83,6 +85,24 @@ export function ProjectForm({ onSubmit, onCancel, isSubmitting }: ProjectFormPro
         {errors.description && (
           <p className="text-sm text-destructive" role="alert">
             {errors.description.message}
+          </p>
+        )}
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="budget">Budget (€)</Label>
+        <Input
+          id="budget"
+          type="number"
+          step="0.01"
+          min="0"
+          placeholder="0.00"
+          {...register('budget')}
+          disabled={isSubmitting}
+        />
+        {errors.budget && (
+          <p className="text-sm text-destructive" role="alert">
+            {errors.budget.message}
           </p>
         )}
       </div>

@@ -25,6 +25,7 @@ const projectSettingsSchema = z.object({
     .max(500, 'Maximum 500 caractères')
     .optional()
     .or(z.literal('')),
+  budget: z.string().optional(),
   icon: z.string().max(2, 'Maximum 2 caractères'),
   color: z
     .string()
@@ -58,6 +59,7 @@ export function ProjectSettingsForm({
     defaultValues: {
       name: project.name,
       description: project.description || '',
+      budget: project.budget ? String(project.budget) : '',
       icon: project.icon,
       color: project.color,
     },
@@ -129,6 +131,25 @@ export function ProjectSettingsForm({
             {errors.description && (
               <p className="text-sm text-destructive" role="alert">
                 {errors.description.message}
+              </p>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="budget">Budget (€)</Label>
+            <Input
+              id="budget"
+              type="number"
+              step="0.01"
+              min="0"
+              placeholder="0.00"
+              {...register('budget')}
+              aria-invalid={errors.budget ? 'true' : 'false'}
+              disabled={isUpdating}
+            />
+            {errors.budget && (
+              <p className="text-sm text-destructive" role="alert">
+                {errors.budget.message}
               </p>
             )}
           </div>
