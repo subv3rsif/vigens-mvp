@@ -15,6 +15,7 @@ export interface Database {
           user_id: string;
           name: string;
           description: string | null;
+          budget: number | null;
           color: string;
           icon: string;
           archived: boolean;
@@ -27,6 +28,7 @@ export interface Database {
           user_id: string;
           name: string;
           description?: string | null;
+          budget?: number | null;
           color?: string;
           icon?: string;
           archived?: boolean;
@@ -39,6 +41,7 @@ export interface Database {
           user_id?: string;
           name?: string;
           description?: string | null;
+          budget?: number | null;
           color?: string;
           icon?: string;
           archived?: boolean;
@@ -65,6 +68,7 @@ export interface Database {
           description: string | null;
           status: string;
           priority: string;
+          cost: number | null;
           due_date: string | null;
           assigned_to: string | null;
           position: number;
@@ -80,6 +84,7 @@ export interface Database {
           description?: string | null;
           status?: string;
           priority?: string;
+          cost?: number | null;
           due_date?: string | null;
           assigned_to?: string | null;
           position?: number;
@@ -95,6 +100,7 @@ export interface Database {
           description?: string | null;
           status?: string;
           priority?: string;
+          cost?: number | null;
           due_date?: string | null;
           assigned_to?: string | null;
           position?: number;
