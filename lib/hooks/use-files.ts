@@ -127,8 +127,13 @@ async function downloadFileFromStorage(fileId: string): Promise<void> {
 
   if (urlError) throw urlError;
 
-  // Open in new tab to trigger download
-  window.open(urlData.signedUrl, '_blank');
+  // Create anchor element for download
+  const link = document.createElement('a');
+  link.href = urlData.signedUrl;
+  link.download = fileData.file_name; // This triggers download instead of navigation
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 }
 
 export function useFiles(taskId: string) {
@@ -241,6 +246,7 @@ export function useFiles(taskId: string) {
   const downloadFile = async (fileId: string) => {
     try {
       await downloadFileFromStorage(fileId);
+      toast.success('Téléchargement démarré');
     } catch (error) {
       toast.error('Erreur lors du téléchargement du fichier');
       throw error;

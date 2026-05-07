@@ -519,21 +519,52 @@ describe('useFiles', () => {
         }),
       });
 
-      // Mock window.open
-      global.window.open = vi.fn();
-
       const { result } = renderHook(() => useFiles('task-1'), { wrapper });
 
       await waitFor(() => {
         expect(result.current.isLoading).toBe(false);
       });
 
+      // Mock DOM manipulation for download after hook is rendered
+      const mockLink = {
+        href: '',
+        download: '',
+        click: vi.fn(),
+      };
+      const originalCreateElement = document.createElement.bind(document);
+      const mockCreateElement = vi.spyOn(document, 'createElement').mockImplementation((tagName: string) => {
+        if (tagName === 'a') {
+          return mockLink as any;
+        }
+        return originalCreateElement(tagName);
+      });
+      const originalAppendChild = document.body.appendChild.bind(document.body);
+      const mockAppendChild = vi.spyOn(document.body, 'appendChild').mockImplementation((node: any) => {
+        if (node === mockLink) {
+          return mockLink as any;
+        }
+        return originalAppendChild(node);
+      });
+      const originalRemoveChild = document.body.removeChild.bind(document.body);
+      const mockRemoveChild = vi.spyOn(document.body, 'removeChild').mockImplementation((node: any) => {
+        if (node === mockLink) {
+          return mockLink as any;
+        }
+        return originalRemoveChild(node);
+      });
+
       await result.current.downloadFile('file-1');
 
-      expect(global.window.open).toHaveBeenCalledWith(
-        'https://example.com/signed-url',
-        '_blank'
-      );
+      expect(mockCreateElement).toHaveBeenCalledWith('a');
+      expect(mockLink.href).toBe('https://example.com/signed-url');
+      expect(mockLink.download).toBe('test.pdf');
+      expect(mockAppendChild).toHaveBeenCalledWith(mockLink);
+      expect(mockLink.click).toHaveBeenCalled();
+      expect(mockRemoveChild).toHaveBeenCalledWith(mockLink);
+
+      mockCreateElement.mockRestore();
+      mockAppendChild.mockRestore();
+      mockRemoveChild.mockRestore();
     });
 
     it('should handle download errors', async () => {
