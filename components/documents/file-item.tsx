@@ -12,7 +12,6 @@ import {
 import { File } from '@/types/database.types';
 import { Button } from '@/components/ui/button';
 import { ConfirmDialog } from '@/components/projects/confirm-dialog';
-import { cn } from '@/lib/utils';
 
 interface FileItemProps {
   file: File;
