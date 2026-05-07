@@ -3,9 +3,9 @@
 import { useMemo } from 'react'
 import { useProjects } from './use-projects'
 import { useTasks } from './use-tasks'
-import type { Project, Task } from '@/types/database.types'
+import type { Project } from '@/types/database.types'
 
-interface ProjectWithBudget extends Project {
+export interface ProjectWithBudget extends Project {
   spent: number
   percentage: number
   status: 'ok' | 'warning' | 'over'

@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { useBudget } from '@/lib/hooks/use-budget'
+import { useBudget, type ProjectWithBudget } from '@/lib/hooks/use-budget'
 import { useProjects } from '@/lib/hooks/use-projects'
 import { useTasks } from '@/lib/hooks/use-tasks'
 
@@ -55,8 +55,8 @@ describe('useBudget', () => {
   it('calculates spent per project', () => {
     const { result } = renderHook(() => useBudget())
 
-    const project1 = result.current.projectsWithBudget.find(p => p.id === '1')
-    const project2 = result.current.projectsWithBudget.find(p => p.id === '2')
+    const project1 = result.current.projectsWithBudget.find((p: ProjectWithBudget) => p.id === '1')
+    const project2 = result.current.projectsWithBudget.find((p: ProjectWithBudget) => p.id === '2')
 
     expect(project1?.spent).toBe(700) // 400 + 300
     expect(project2?.spent).toBe(1600)
@@ -73,8 +73,8 @@ describe('useBudget', () => {
   it('sets status based on percentage', () => {
     const { result } = renderHook(() => useBudget())
 
-    const project1 = result.current.projectsWithBudget.find(p => p.id === '1')
-    const project2 = result.current.projectsWithBudget.find(p => p.id === '2')
+    const project1 = result.current.projectsWithBudget.find((p: ProjectWithBudget) => p.id === '1')
+    const project2 = result.current.projectsWithBudget.find((p: ProjectWithBudget) => p.id === '2')
 
     expect(project1?.status).toBe('ok') // 70% < 80%
     expect(project2?.status).toBe('warning') // 80% >= 80% and < 100%

@@ -33,6 +33,7 @@ describe('TaskCard', () => {
     description: 'Test description',
     status: 'todo',
     priority: 'high',
+    cost: null,
     due_date: '2026-05-10',
     assigned_to: null,
     position: 0,
