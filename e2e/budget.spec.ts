@@ -146,9 +146,9 @@ test.describe("Budget Tracking", () => {
 
     // Check for color classes (bg-success, bg-warning, bg-error)
     const hasColorClass =
-      progressBarClasses.includes("bg-success") ||
-      progressBarClasses.includes("bg-warning") ||
-      progressBarClasses.includes("bg-error");
+      progressBarClasses!.includes("bg-success") ||
+      progressBarClasses!.includes("bg-warning") ||
+      progressBarClasses!.includes("bg-error");
 
     expect(hasColorClass).toBe(true);
   });
