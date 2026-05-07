@@ -24,7 +24,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
   // Budget calculations
   const hasBudget = project.budget !== null && project.budget !== undefined;
   const spent = tasks.reduce((sum, t) => sum + (t.cost || 0), 0);
-  const percentage = hasBudget && project.budget > 0
+  const percentage = hasBudget && project.budget && project.budget > 0
     ? (spent / project.budget) * 100
     : 0;
 
@@ -64,9 +64,10 @@ export function ProjectCard({ project }: ProjectCardProps) {
             <div className="flex items-center justify-between text-xs mb-1">
               <span className="text-text-secondary">Budget</span>
               <span className="font-medium">
-                {formatCurrency(spent)} / {formatCurrency(project.budget)} €
+                {formatCurrency(spent)} / {formatCurrency(project.budget || 0)} €
               </span>
             </div>
+            <BudgetProgressBar percentage={percentage} status={getStatus()} showLabel={false} />
             <BudgetProgressBar percentage={percentage} status={getStatus()} showLabel={false} />
           </div>
         </div>
