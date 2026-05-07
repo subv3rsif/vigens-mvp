@@ -29,6 +29,7 @@ const taskFormSchema = z.object({
     .optional(),
   priority: z.enum(['low', 'medium', 'high']).optional(),
   due_date: z.string().optional(),
+  cost: z.coerce.number().min(0).optional(),
 });
 
 export type TaskFormData = z.infer<typeof taskFormSchema>;
@@ -96,6 +97,23 @@ export function TaskForm({
           <p className="text-xs text-destructive">
             {errors.description.message}
           </p>
+        )}
+      </div>
+
+      {/* Cost field */}
+      <div className="space-y-2">
+        <Label htmlFor="cost">Coût (€)</Label>
+        <Input
+          id="cost"
+          type="number"
+          step="0.01"
+          min="0"
+          placeholder="0.00"
+          aria-invalid={errors.cost ? 'true' : 'false'}
+          {...register('cost')}
+        />
+        {errors.cost && (
+          <p className="text-xs text-destructive">{errors.cost.message}</p>
         )}
       </div>
 

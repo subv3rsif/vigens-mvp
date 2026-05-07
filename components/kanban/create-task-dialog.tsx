@@ -60,6 +60,7 @@ export function CreateTaskDialog({
         status: initialStatus,
         priority: data.priority || 'medium',
         due_date: data.due_date || null,
+        cost: data.cost ? Number(data.cost) : null,
         position,
       };
 

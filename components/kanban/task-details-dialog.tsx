@@ -45,6 +45,7 @@ const taskFormSchema = z.object({
   status: z.enum(['todo', 'in_progress', 'done']),
   priority: z.enum(['low', 'medium', 'high']).optional(),
   due_date: z.string().optional(),
+  cost: z.coerce.number().min(0).optional(),
 });
 
 type TaskFormData = z.infer<typeof taskFormSchema>;
@@ -85,6 +86,7 @@ export function TaskDetailsDialog({
           status: task.status as ColumnStatusType,
           priority: task.priority as TaskPriorityType,
           due_date: task.due_date || '',
+          cost: task.cost || '',
         }
       : undefined,
   });
@@ -135,6 +137,7 @@ export function TaskDetailsDialog({
           status: data.status,
           priority: data.priority || 'medium',
           due_date: data.due_date || null,
+          cost: data.cost ? Number(data.cost) : null,
         },
       },
       {
@@ -203,6 +206,23 @@ export function TaskDetailsDialog({
                     <p className="text-xs text-destructive">
                       {errors.description.message}
                     </p>
+                  )}
+                </div>
+
+                {/* Cost field */}
+                <div className="space-y-2">
+                  <Label htmlFor="edit-cost">Coût (€)</Label>
+                  <Input
+                    id="edit-cost"
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    placeholder="0.00"
+                    aria-invalid={errors.cost ? 'true' : 'false'}
+                    {...register('cost')}
+                  />
+                  {errors.cost && (
+                    <p className="text-xs text-destructive">{errors.cost.message}</p>
                   )}
                 </div>
 
@@ -356,6 +376,16 @@ export function TaskDetailsDialog({
                         })}
                       </span>
                     </div>
+                  </div>
+                )}
+
+                {/* Cost */}
+                {task.cost && (
+                  <div className="space-y-2">
+                    <Label className="text-muted-foreground">Coût</Label>
+                    <p className="text-sm font-medium text-foreground">
+                      {task.cost.toFixed(2)} €
+                    </p>
                   </div>
                 )}
 
