@@ -464,9 +464,120 @@ describe('useFiles', () => {
         expect(result.current.deleteFile.isError).toBe(true);
       });
 
-      expect(mockToast.error).toHaveBeenCalledWith(
-        'Erreur lors de la suppression du fichier'
-      );
+      expect(mockToast.error).toHaveBeenCalled();
+    });
+
+    it('should reject delete when user is not authenticated', async () => {
+      const mockFiles = [
+        {
+          id: 'file-1',
+          task_id: 'task-1',
+          user_id: 'user-1',
+          file_path: 'task-1/file-1-test.pdf',
+          file_name: 'test.pdf',
+          file_type: 'application/pdf',
+          file_size: 1024,
+          storage_bucket: 'project-files',
+          created_at: '2024-01-01T00:00:00Z',
+          updated_at: '2024-01-01T00:00:00Z',
+        },
+      ];
+
+      // First call for initial fetch - authenticated
+      mockSupabase.auth.getSession
+        .mockResolvedValueOnce({
+          data: { session: { user: { id: 'user-1' } } },
+        })
+        // Second call for delete - not authenticated
+        .mockResolvedValueOnce({
+          data: { session: null },
+        });
+
+      const mockSelect = vi.fn().mockReturnThis();
+      const mockEq = vi.fn().mockReturnThis();
+      const mockOrder = vi.fn().mockResolvedValue({ data: mockFiles, error: null });
+
+      mockSupabase.from.mockReturnValue({
+        select: mockSelect,
+      });
+
+      mockSelect.mockReturnValue({
+        eq: mockEq,
+      });
+
+      mockEq.mockReturnValue({
+        order: mockOrder,
+      });
+
+      const { result } = renderHook(() => useFiles('task-1'), { wrapper });
+
+      await waitFor(() => {
+        expect(result.current.isLoading).toBe(false);
+      });
+
+      result.current.deleteFile.mutate('file-1');
+
+      await waitFor(() => {
+        expect(result.current.deleteFile.isError).toBe(true);
+      });
+
+      expect(mockToast.error).toHaveBeenCalledWith('Non authentifié');
+    });
+
+    it('should reject delete when user does not own the file', async () => {
+      const mockFiles = [
+        {
+          id: 'file-1',
+          task_id: 'task-1',
+          user_id: 'user-1',
+          file_path: 'task-1/file-1-test.pdf',
+          file_name: 'test.pdf',
+          file_type: 'application/pdf',
+          file_size: 1024,
+          storage_bucket: 'project-files',
+          created_at: '2024-01-01T00:00:00Z',
+          updated_at: '2024-01-01T00:00:00Z',
+        },
+      ];
+
+      // User is authenticated as user-2
+      mockSupabase.auth.getSession.mockResolvedValue({
+        data: { session: { user: { id: 'user-2' } } },
+      });
+
+      const mockSelect = vi.fn().mockReturnThis();
+      const mockEq = vi.fn().mockReturnThis();
+      const mockOrder = vi.fn().mockResolvedValue({ data: mockFiles, error: null });
+
+      mockSupabase.from.mockReturnValue({
+        select: mockSelect,
+      });
+
+      mockSelect.mockReturnValue({
+        eq: mockEq,
+      });
+
+      mockEq.mockReturnValue({
+        order: mockOrder,
+        single: vi.fn().mockResolvedValue({
+          data: mockFiles[0],
+          error: null,
+        }),
+      });
+
+      const { result } = renderHook(() => useFiles('task-1'), { wrapper });
+
+      await waitFor(() => {
+        expect(result.current.isLoading).toBe(false);
+      });
+
+      result.current.deleteFile.mutate('file-1');
+
+      await waitFor(() => {
+        expect(result.current.deleteFile.isError).toBe(true);
+      });
+
+      expect(mockToast.error).toHaveBeenCalledWith('Non autorisé');
     });
   });
 
@@ -625,6 +736,139 @@ describe('useFiles', () => {
       expect(mockToast.error).toHaveBeenCalledWith(
         'Erreur lors du téléchargement du fichier'
       );
+    });
+
+    it('should reject download when user is not authenticated', async () => {
+      const mockFiles = [
+        {
+          id: 'file-1',
+          task_id: 'task-1',
+          user_id: 'user-1',
+          file_path: 'task-1/file-1-test.pdf',
+          file_name: 'test.pdf',
+          file_type: 'application/pdf',
+          file_size: 1024,
+          storage_bucket: 'project-files',
+          created_at: '2024-01-01T00:00:00Z',
+          updated_at: '2024-01-01T00:00:00Z',
+        },
+      ];
+
+      // First call for initial fetch - authenticated
+      mockSupabase.auth.getSession
+        .mockResolvedValueOnce({
+          data: { session: { user: { id: 'user-1' } } },
+        })
+        // Second call for download - not authenticated
+        .mockResolvedValueOnce({
+          data: { session: null },
+        });
+
+      const mockSelect = vi.fn().mockReturnThis();
+      const mockEq = vi.fn().mockReturnThis();
+      const mockOrder = vi.fn().mockResolvedValue({ data: mockFiles, error: null });
+
+      mockSupabase.from.mockReturnValue({
+        select: mockSelect,
+      });
+
+      mockSelect.mockReturnValue({
+        eq: mockEq,
+      });
+
+      mockEq.mockReturnValue({
+        order: mockOrder,
+      });
+
+      const { result } = renderHook(() => useFiles('task-1'), { wrapper });
+
+      await waitFor(() => {
+        expect(result.current.isLoading).toBe(false);
+      });
+
+      await result.current.downloadFile('file-1');
+
+      expect(mockToast.error).toHaveBeenCalledWith('Non authentifié');
+    });
+
+    it('should reject download when file is not found', async () => {
+      mockSupabase.auth.getSession.mockResolvedValue({
+        data: { session: { user: { id: 'user-1' } } },
+      });
+
+      const mockSelect = vi.fn().mockReturnThis();
+      const mockEq = vi.fn().mockReturnThis();
+      const mockOrder = vi.fn().mockResolvedValue({ data: [], error: null });
+
+      mockSupabase.from.mockReturnValue({
+        select: mockSelect,
+      });
+
+      mockSelect.mockReturnValue({
+        eq: mockEq,
+      });
+
+      mockEq.mockReturnValue({
+        order: mockOrder,
+      });
+
+      const { result } = renderHook(() => useFiles('task-1'), { wrapper });
+
+      await waitFor(() => {
+        expect(result.current.isLoading).toBe(false);
+      });
+
+      await result.current.downloadFile('file-1');
+
+      expect(mockToast.error).toHaveBeenCalledWith('Fichier introuvable');
+    });
+
+    it('should reject download when user does not own the file', async () => {
+      const mockFiles = [
+        {
+          id: 'file-1',
+          task_id: 'task-1',
+          user_id: 'user-1',
+          file_path: 'task-1/file-1-test.pdf',
+          file_name: 'test.pdf',
+          file_type: 'application/pdf',
+          file_size: 1024,
+          storage_bucket: 'project-files',
+          created_at: '2024-01-01T00:00:00Z',
+          updated_at: '2024-01-01T00:00:00Z',
+        },
+      ];
+
+      // User is authenticated as user-2
+      mockSupabase.auth.getSession.mockResolvedValue({
+        data: { session: { user: { id: 'user-2' } } },
+      });
+
+      const mockSelect = vi.fn().mockReturnThis();
+      const mockEq = vi.fn().mockReturnThis();
+      const mockOrder = vi.fn().mockResolvedValue({ data: mockFiles, error: null });
+
+      mockSupabase.from.mockReturnValue({
+        select: mockSelect,
+      });
+
+      mockSelect.mockReturnValue({
+        eq: mockEq,
+      });
+
+      mockEq.mockReturnValue({
+        order: mockOrder,
+      });
+
+      const { result } = renderHook(() => useFiles('task-1'), { wrapper });
+
+      await waitFor(() => {
+        expect(result.current.isLoading).toBe(false);
+      });
+
+      await result.current.downloadFile('file-1');
+
+      expect(mockToast.error).toHaveBeenCalledWith('Non autorisé');
     });
   });
 });

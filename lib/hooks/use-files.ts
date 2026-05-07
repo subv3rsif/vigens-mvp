@@ -83,6 +83,11 @@ async function uploadFileToStorage(
 async function deleteFileFromStorage(fileId: string): Promise<void> {
   const supabase = createClient();
 
+  // Add authentication check
+  const { data: sessionData } = await supabase.auth.getSession();
+  const userId = sessionData?.session?.user?.id;
+  if (!userId) throw new Error('Non authentifié');
+
   // Get file metadata to know the storage path
   const { data: fileData, error: fetchError } = await supabase
     .from('files')
@@ -91,6 +96,10 @@ async function deleteFileFromStorage(fileId: string): Promise<void> {
     .single();
 
   if (fetchError) throw fetchError;
+  if (!fileData) throw new Error('Fichier introuvable');
+
+  // Add authorization check
+  if (fileData.user_id !== userId) throw new Error('Non autorisé');
 
   // Delete from storage
   const { error: storageError } = await supabase.storage
@@ -144,7 +153,7 @@ export function useFiles(taskId: string) {
   const { data: files = [], isLoading } = useQuery({
     queryKey,
     queryFn: () => fetchFiles(taskId),
-    enabled: !!taskId,
+    enabled: !!taskId && taskId.trim().length > 0,
   });
 
   // Upload file mutation
@@ -235,16 +244,40 @@ export function useFiles(taskId: string) {
 
       toast.success('Fichier supprimé');
     },
-    onError: (_, __, context) => {
+    onError: (error, _, context) => {
       // Rollback on error
       queryClient.setQueryData(queryKey, context?.previousFiles);
-      toast.error('Erreur lors de la suppression du fichier');
+      const errorMessage = error instanceof Error ? error.message : 'Erreur lors de la suppression';
+      toast.error(errorMessage);
     },
   });
 
   // Download file function
   const downloadFile = async (fileId: string) => {
     try {
+      const supabase = createClient();
+
+      // Add authentication check
+      const { data: sessionData } = await supabase.auth.getSession();
+      const userId = sessionData?.session?.user?.id;
+      if (!userId) {
+        toast.error('Non authentifié');
+        return;
+      }
+
+      // Find file and check ownership
+      const file = files.find((f) => f.id === fileId);
+      if (!file) {
+        toast.error('Fichier introuvable');
+        return;
+      }
+
+      // Add authorization check
+      if (file.user_id !== userId) {
+        toast.error('Non autorisé');
+        return;
+      }
+
       await downloadFileFromStorage(fileId);
       toast.success('Téléchargement démarré');
     } catch (error) {
