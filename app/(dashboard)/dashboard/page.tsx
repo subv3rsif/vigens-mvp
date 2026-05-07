@@ -1,6 +1,9 @@
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
+
+// Force dynamic rendering to avoid Supabase client errors during build
+export const dynamic = 'force-dynamic';
 import Link from 'next/link';
 import { FolderKanban, ListTodo, Plus, ArrowRight, CheckCircle2, Circle, Clock } from 'lucide-react';
 import { useProjects } from '../../../lib/hooks/use-projects';

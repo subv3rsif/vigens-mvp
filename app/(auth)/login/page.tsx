@@ -5,6 +5,9 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { createClient } from '../../../lib/supabase/client'
 
+// Force dynamic rendering to avoid Supabase client errors during build
+export const dynamic = 'force-dynamic'
+
 export default function LoginPage() {
   const router = useRouter()
   const [email, setEmail] = useState('')
