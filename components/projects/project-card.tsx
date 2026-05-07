@@ -4,12 +4,36 @@ import { Project } from "../../types/database.types";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Button } from "../ui/button";
 import { cn } from "../../lib/utils";
+import { useTasks } from "../../lib/hooks/use-tasks";
+import { BudgetProgressBar } from "../dashboard/budget-progress-bar";
 
 interface ProjectCardProps {
   project: Project;
 }
 
+const formatCurrency = (amount: number) => {
+  return new Intl.NumberFormat('fr-FR', {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(amount)
+}
+
 export function ProjectCard({ project }: ProjectCardProps) {
+  const { tasks } = useTasks(project.id);
+
+  // Budget calculations
+  const hasBudget = project.budget !== null && project.budget !== undefined;
+  const spent = tasks.reduce((sum, t) => sum + (t.cost || 0), 0);
+  const percentage = hasBudget && project.budget > 0
+    ? (spent / project.budget) * 100
+    : 0;
+
+  const getStatus = (): 'ok' | 'warning' | 'over' => {
+    if (percentage > 100) return 'over';
+    if (percentage >= 80) return 'warning';
+    return 'ok';
+  };
+
   return (
     <Card
       className={cn(
@@ -33,6 +57,20 @@ export function ProjectCard({ project }: ProjectCardProps) {
           </CardContent>
         )}
       </Link>
+
+      {hasBudget && (
+        <div className="px-6 pb-4">
+          <div className="mt-3 pt-3 border-t border-border">
+            <div className="flex items-center justify-between text-xs mb-1">
+              <span className="text-text-secondary">Budget</span>
+              <span className="font-medium">
+                {formatCurrency(spent)} / {formatCurrency(project.budget)} €
+              </span>
+            </div>
+            <BudgetProgressBar percentage={percentage} status={getStatus()} showLabel={false} />
+          </div>
+        </div>
+      )}
 
       <Link
         href={`/projects/${project.id}`}
