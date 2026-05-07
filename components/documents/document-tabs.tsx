@@ -9,8 +9,6 @@ interface DocumentTabsProps {
   taskId: string;
 }
 
-type TabType = 'files' | 'links';
-
 export function DocumentTabs({ taskId }: DocumentTabsProps) {
   return (
     <Tabs defaultValue="files" className="w-full">
