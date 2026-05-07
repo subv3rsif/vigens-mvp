@@ -203,7 +203,7 @@ describe('LinkForm', () => {
 
     it('resets form after successful submission', async () => {
       const user = userEvent.setup();
-      mockCreateLink.mutate.mockImplementation((data, options) => {
+      mockCreateLink.mutate.mockImplementation((_data, options) => {
         options.onSuccess?.();
       });
 
@@ -230,7 +230,7 @@ describe('LinkForm', () => {
     it('calls onSuccess callback after successful submission', async () => {
       const user = userEvent.setup();
       const onSuccess = vi.fn();
-      mockCreateLink.mutate.mockImplementation((data, options) => {
+      mockCreateLink.mutate.mockImplementation((_data, options) => {
         options.onSuccess?.();
       });
 
